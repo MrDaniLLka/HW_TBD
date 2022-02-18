@@ -1,10 +1,10 @@
 CREATE TABLE student(
 	id SERIAL PRIMARY KEY,
-	name VARCHAR(255) NOT NULL,
-	surname VARCHAR(255),
-	address VARCHAR(255),
-	num_group INT,
-	score REAL
+	name varchar(255) NOT NULL,
+	surname varchar(255),
+	address varchar(255),
+	score REAL CHECK (score >=2 AND  score<=5),
+	n_group INT CHECK (n_group>=1000 AND n_group<=9999)
 );
 
 CREATE TABLE hobby(
