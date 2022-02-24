@@ -22,22 +22,18 @@ CREATE TABLE student_hobby(
 );
 
 
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Владислав', 'Березуцкий', 'Москва', 5412, 3.3);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Иван', 'Брагин', 'Москва', 2241, 4.4);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Степан', 'Мельник', 'Кимры', 1181, 3.3);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Иван', 'Дуров', 'Кимры', 1221, 4.8);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Дмитрий', 'Сидоров', 'Удачный', 2155, 4.1);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Марина', 'Михалева', 'Кимры', 5215, 3.0);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Виктор', 'Авксеньтьев', 'Одесса', 3132, 3.1);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Михаил', 'Круг', 'Дубна', 3412, 3.5);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Дмитрий', 'Мирская', 'Дубна', 1525, 3.9);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Вера', 'Штатская', 'Дубна', 1283, 4.1);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Данила', 'Мякотин', 'Дубна', 3472, 3.5);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Александра', 'Солидная', 'Москва', 3273, 2.2);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Евгений', 'Олегов', 'Москва', 1372, 3.9);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Андрей', 'Дъяконов', 'Москва', 2363, 5.7);
-INSERT INTO student (name, surname, address, n_group, score) VALUES ('Андрей', 'Смирнов', 'Дубна', 2384, 5.3);
-
+INSERT INTO student_hobby (student_id, hobby_id, date_start, date_end) VALUES (5, 1, '2010-01-07 12:03:59', '2011-03-13');
+INSERT INTO student_hobby (student_id, hobby_id, date_start, date_end) VALUES (2, 2, '2019-01-05 12:12:59', '2021-02-12');
+INSERT INTO student_hobby (student_id, hobby_id, date_start, date_end) VALUES (4, 4, '2015-08-08 09:14:59', null);
+INSERT INTO student_hobby (student_id, hobby_id, date_start, date_end) VALUES (5, 2, '2017-12-12 14:32:59', null);
+INSERT INTO student_hobby (student_id, hobby_id, date_start, date_end) VALUES (15, 1, '2018-06-05 12:14:59', null);
+INSERT INTO student_hobby (student_id, hobby_id, date_start, date_end) VALUES (10, 2, '2018-03-04 14:14:59', '2008-11-01');
+INSERT INTO student_hobby (student_id, hobby_id, date_start, date_end) VALUES (10, 3, '2019-03-05 11:11:59', '2019-9-03');
+INSERT INTO student_hobby (student_id, hobby_id, date_start, date_end) VALUES (8, 2, '2020-03-11 13:13:59', null);
+INSERT INTO student_hobby (student_id, hobby_id, date_start, date_end) VALUES (2, 3, '2022-12-01 12:14:59', null);
+INSERT INTO student_hobby (student_id, hobby_id, date_start, date_end) VALUES (3, 2, '2012-01-01 12:15:59', '2022-12-12');
+INSERT INTO student_hobby (student_id, hobby_id, date_start, date_end) VALUES (3, 1, '2012-01-01 12:15:59', '2022-12-12');
+INSERT INTO student_hobby (student_id, hobby_id, date_start, date_end) VALUES (3, 4, '2011-12-12 10:14:59', '2012-02-01');
 
 INSERT INTO hobby (name, risk) VALUES ('танцы', 0.4);
 INSERT INTO hobby (name, risk) VALUES ('бег', 0.6);
