@@ -275,7 +275,7 @@ WHERE hb.name LIKE 'Футбол'
 GROUP BY EXTRACT(MONTH FROM st.date_birth);
 
 --32
-SELECT st.name Имя, st.surname Фамилия, st.n_group Группа
+SELECT st.name, st.surname, st.n_group
 FROM student st
 RIGHT JOIN student_hobby sh ON sh.student_id = st.id
 LEFT JOIN hobby hb ON sh.hobby_id = hb.id
@@ -290,12 +290,12 @@ END
 FROM student st;
 
 --34
-SELECT rpad(st.surname, 10, '#')
-FROM student st;
+SELECT rpad(surname, 10, '#')
+FROM student;
 
 --35
-SELECT replace(st.surname, '#', '')
-FROM student st;
+SELECT replace(surname, '#', '')
+FROM student;
 
 --36
 SELECT  
