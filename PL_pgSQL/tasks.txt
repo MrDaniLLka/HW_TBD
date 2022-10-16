@@ -1,0 +1,230 @@
+-- 1
+DO $$
+BEGIN
+  RAISE NOTICE 'Hello, world!';
+END
+$$ language plpgsql;
+
+-- 2
+DO $$
+DECLARE 
+	date varchar := CURRENT_DATE;
+BEGIN
+	RAISE NOTICE ' % ', date;
+END;
+$$ language plpgsql;
+
+-- 3
+DO $$
+DECLARE
+  x int := 16;
+  y int := 3;
+BEGIN
+  RAISE NOTICE 'x + y = %', (x+y);
+  RAISE NOTICE 'x - y = %', (x-y);
+  RAISE NOTICE 'x * y = %', (x*y);
+  RAISE NOTICE 'x / y = %', (x/y);
+END
+$$ language plpgsql;
+
+-- 4
+DO $$
+DECLARE
+  x int := 4;
+BEGIN
+  IF x = 5 THEN RAISE NOTICE 'Отлично!';
+  ELSIF x = 4 THEN RAISE NOTICE 'Хорошо';
+  ELSIF x = 3 THEN RAISE NOTICE 'Удовлетворительно';
+  ELSIF x = 2 THEN RAISE NOTICE 'Неуд';
+  ELSE RAISE NOTICE 'Введенная оценка не верна';
+  END IF;
+END
+$$ language plpgsql;
+
+DO $$
+DECLARE
+  x int := 3;
+BEGIN
+  CASE x
+  	WHEN 5 THEN RAISE NOTICE 'Отлично!';
+	  WHEN 4 THEN RAISE NOTICE 'Хорошо';
+	  WHEN 3 THEN RAISE NOTICE 'Удовлетворительно';
+	  WHEN 2 THEN RAISE NOTICE 'Неуд';
+	  ELSE RAISE NOTICE 'Введенная оценка не верна';
+  END CASE;
+END
+$$ language plpgsql;
+
+-- 5
+DO $$
+DECLARE 
+	n int := 20;
+BEGIN
+	WHILE n < 31 LOOP
+		RAISE NOTICE '%^2 = %', n, n*n;
+		n = n + 1;
+	END LOOP;
+END;
+$$ language plpgsql;
+
+DO $$
+BEGIN
+	FOR n IN 20..30 LOOP
+		RAISE NOTICE '%^2 = %', n, n*n;
+	END LOOP;
+END;
+$$ language plpgsql;
+
+-- 6
+CREATE OR REPLACE FUNCTION collatz(n int) RETURNS int AS $$
+BEGIN
+	WHILE (n != 1)
+	LOOP
+		CASE n % 2
+			WHEN 0 
+				THEN n := n / 2;
+			ELSE 
+				n := n * 3 + 1;
+		END CASE;
+	END LOOP;
+	RETURN n;
+END
+$$ language plpgsql;
+
+CREATE OR REPLACE PROCEDURE c_procedure(INOUT x int) AS $$
+BEGIN
+	WHILE x!=1 LOOP
+		CASE 
+			WHEN x%2=0 THEN x := x/2;
+			ELSE  x := x*3+1;
+		END CASE;
+	END LOOP;
+	RAISE NOTICE ' % ', n;
+END;
+$$ language plpgsql;
+
+-- 7
+CREATE OR REPLACE FUNCTION lucs(n int) RETURNS int AS $$
+DECLARE
+	L0 int := 2;
+	L1 int := 1;
+	temp int := 0;
+BEGIN
+	WHILE n <> 2 LOOP
+		temp = L0 + L1;
+		L0 = L1;
+		L1 = temp;
+		n = n - 1;
+	END LOOP;
+	RETURN L1;
+END
+$$ language plpgsql;
+
+-- 8
+CREATE OR REPLACE FUNCTION people_year(year int) RETURNS int AS $$
+DECLARE 
+	c int;
+BEGIN
+	SELECT COUNT(birth_date) INTO c
+		FROM people
+		WHERE extract(year from birth_date) = year;
+	RETURN var;
+	END
+$$ language plpgsql;
+
+-- 9
+CREATE OR REPLACE FUNCTION eyes(col varchar) RETURNS int AS $$
+DECLARE 
+	c int;
+BEGIN
+	SELECT COUNT(*) INTO c
+	FROM people
+	WHERE people.eyes = eyes.col;
+	RETURN c;
+END
+$$ language plpgsql;
+
+SELECT eyes('brown');
+
+-- 10
+CREATE OR REPLACE FUNCTION id() RETURNS SETOF int
+as $$
+BEGIN
+	RETURN QUERY 
+	SELECT 
+		people.id
+	FROM
+		people
+	ORDER BY birth_date DESC
+	LIMIT 1;
+	
+END
+$$ language plpgsql;
+
+SELECT id();
+
+-- 11
+CREATE OR REPLACE PROCEDURE imt(IN m real) AS $$
+DECLARE
+	p people%ROWTYPE;
+BEGIN
+	FOR p IN 
+		SELECT * FROM people
+		WHERE people.weight / ((people.growth / 100) ^ 2) > x
+	LOOP
+		RAISE NOTICE ' % %  %', p.id, p.name, p.surname;
+	END LOOP;
+END;
+
+$$ language plpgsql;
+
+-- 12
+BEGIN;
+CREATE TABLE relations (
+main_id integer REFERENCES people(id),
+relative_id integer REFERENCES people(id));
+COMMIT;
+-- 13
+
+CREATE OR REPLACE PROCEDURE
+add_person(IN new_name varchar, 
+		   new_surname varchar, 
+		   new_birth_date DATE, 
+		   new_growth real, 
+		   new_weight real, 
+		   new_eyes varchar, 
+		   new_hair varchar,  
+		   new_relative_id int DEFAULT 0) AS $$
+DECLARE
+pers_id int;
+BEGIN
+INSERT INTO people (name, surname, birth_date, growth, weight, eyes, hair)
+VALUES (new_name, new_surname, new_birth_date, new_growth, new_weight, new_eyes, new_hair)
+RETURNING id INTO pers_id;
+IF new_relative_id != 0 THEN
+INSERT INTO relations(main_id, relative_id)
+VALUES (pers_id, new_relative_id);
+END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 14
+BEGIN;
+ALTER TABLE people ADD COLUMN update_at TIMESTAMP DEFAULT current_timestamp;
+COMMIT;
+END;
+
+-- 15
+CREATE OR REPLACE PROCEDURE update_characters(new_id int, new_growth real, new_weight real) AS $$
+DECLARE
+	up timestamp;
+BEGIN
+	up := current_timestamp;
+	UPDATE people SET growth = new_growth,
+					  weight = new_weight,
+					  update_at = up
+					  WHERE id = new_id;
+	RAISE NOTICE 'Success update at %', up;
+END;
+$$ language plpgsql;
+
