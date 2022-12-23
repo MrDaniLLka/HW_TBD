@@ -35,4 +35,5 @@
 
 
 ## Локальный деплой
+Следует указать tinkoff токен (как тут https://github.com/Tinkoff/invest-openapi-go-sdk) в configs/app.json
 `docker compose up`
