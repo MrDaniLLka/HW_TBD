@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+    api:
+        build: ./
+        command: ./main
+        ports:
+            - 8080:8080
+        networks:
+            - postgres
+        volumes:
+            - go-modules:/go/pkg/mod
+        depends_on:
+            - db
+        environment:
+            - db_name=investor
+            - db_pass=0000
+            - db_user=postgres
+            - db_type=postgres
+            - db_host=db
+            - db_port=5432
+    db:
+        image: postgres:14-alpine
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=0000
+            - POSTGRES_DB=investor
+        ports:
+            - 5431:5432
+        networks:
+            - postgres
+
+networks:
+    postgres:
+        driver: bridge
+
+volumes:
+    go-modules: # Define the volume
